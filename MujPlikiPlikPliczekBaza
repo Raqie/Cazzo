@@ -1,0 +1,74 @@
+//Elo
+using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace LodzioMiodzio
+{
+    public partial class Form1 : Form
+    {
+
+        MySqlConnection polaczenie = new MySqlConnection("server=localhost;user=root;database=LodzioMiodzio");
+        MySqlCommand komenda;
+        MySqlDataReader czytnik;
+        string zapytanieSQL = "";
+
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void pobierz_btn_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                if (polaczenie.State == ConnectionState.Closed)
+                {
+                    polaczenie.Open();
+                }
+                zapytanieSQL = "select * from users";
+                komenda = new MySqlCommand(zapytanieSQL, polaczenie);
+                czytnik = komenda.ExecuteReader();
+
+                lista_lib.Items.Clear();
+                if (czytnik.HasRows)
+                {
+                    while (czytnik.Read())
+                    {
+                        lista_lib.Items.Add(string.Format("{0} - {1} - ({2})", czytnik["id"].ToString(), czytnik["name"].ToString(), czytnik.GetInt32("age")));
+                    }
+                    czytnik.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                string bladnaDana = string.Format("Błąd podczas pobierania danych:\n{0}", ex.Message);
+                MessageBox.Show(bladnaDana, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                polaczenie.Close();
+            }
+        }
+
+        private void wyczysc_btn_Click(object sender, EventArgs e)
+        {
+            lista_lib.Items.Clear();
+        }
+
+        private void wyjdz_btn_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+    }
+}
+//Pozdruw_Kanara
