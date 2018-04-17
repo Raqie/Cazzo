@@ -1,0 +1,66 @@
+package wzorceprojektowe;
+
+public class Wzorceprojektowe {
+
+    public static void main(String[] args) {
+        A ob = new A();
+        ob.showBigString("KOT ALE MA");
+    }
+}
+// to ma byc w klasie A
+
+package wzorceprojektowe;
+
+
+public class A implements AInterface {
+    public void showBigString(String str) {
+        C ob = new C();
+        System.out.println(ob.fun(str));
+    }
+}
+// to ma byc po prostu w interfejsie A 
+
+package wzorceprojektowe;
+
+public interface AInterface {
+    public void showBigString(String str);
+}
+// klasa B
+package wzorceprojektowe;
+
+public class B implements BInterface {
+    
+     @Override
+    public String funWithComplexName(String str) {
+        return str.toLowerCase();
+    }
+}
+//interfejs do B
+package wzorceprojektowe;
+
+
+public interface BInterface {
+    public String funWithComplexName(String str);
+}
+//klasa C
+
+package wzorceprojektowe;
+
+
+public class C implements CInterface {
+    
+   @Override
+    public String fun(String str) {
+        B ob = new B();
+        return ob.funWithComplexName(str).toLowerCase();
+    }
+    
+}
+
+//interfejs do C
+package wzorceprojektowe;
+
+
+public interface CInterface {
+    public String fun(String str);
+}
