@@ -1,0 +1,22 @@
+//to w osobnym okienku taka ala głowna funkcja do ktorej bede sie odnosił
+public interface Krztałt {
+   void draw();
+}
+
+public class Element implements Ellipse2D {
+@Override
+   public void draw() {System.out.println (Ellipse2D);
+   } 
+   }
+   
+   Public class Element (return new Ellipse2D);
+   
+   Public class Wyrysowanie {
+   
+   public static void main(String[] args) {
+   Element shape1 = Wyrysowanie.getShape("Ellipse2D");
+   
+   }
+   };
+   
+   
