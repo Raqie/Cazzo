@@ -1,0 +1,205 @@
+using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace LodzioMiodzio
+{
+    public partial class Form1 : Form
+    {
+
+        MySqlConnection polaczenie = new MySqlConnection("server=localhost;user=root;database=LodzioMiodzio");
+        MySqlCommand komenda;
+        MySqlDataReader czytnik;
+        string zapytanieSQL = "";
+
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void pobierz_btn_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                if (polaczenie.State == ConnectionState.Closed)
+                {
+                    polaczenie.Open();
+                }
+                zapytanieSQL = "select * from users";
+                komenda = new MySqlCommand(zapytanieSQL, polaczenie);
+                czytnik = komenda.ExecuteReader();
+
+                lista_lib.Items.Clear();
+                if (czytnik.HasRows)
+                {
+                    while (czytnik.Read())
+                    {
+                        lista_lib.Items.Add(string.Format("{0} - {1} - ({2})", czytnik["id"].ToString(), czytnik["name"].ToString(), czytnik.GetInt32("age")));
+                    }
+                    czytnik.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                string bladnaDana = string.Format("Błąd podczas pobierania danych:\n{0}", ex.Message);
+                MessageBox.Show(bladnaDana, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                polaczenie.Close();
+            }
+        }
+
+        private void wyczysc_btn_Click(object sender, EventArgs e)
+        {
+            lista_lib.Items.Clear();
+        }
+
+        private void wyjdz_btn_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+    }
+}
+class L {
+	public: 
+	int wiek = 0;
+	
+	L* next = NULL;
+	L (int wiekk) {
+		wiek = wiekk;
+	}
+};
+ 
+class Singleton {
+	private:
+		static Singleton* instance;
+		L *start = NULL;
+		L *curr = NULL;
+		int ile = 0;
+		
+	public:
+		static Singleton* getInstance() {
+			if (instance == NULL) {
+				instance = new Singleton;
+			}
+			
+			return instance;
+		}
+		
+		Singleton* dodaj(int wiek) {
+			if (start == NULL) {
+				start = new L(wiek);
+			} else {
+				*curr = *start;
+				while (curr->next != NULL) {
+					curr = curr->next;
+				}
+				curr = new L(wiek);
+			}
+			
+			ile++;
+			
+			return this;
+		}
+		
+		void wyswietl() {
+			curr = start;
+			while (curr != NULL) {
+				std::cout << curr->wiek << std::endl;
+				curr = curr->next;  
+			}
+		}
+};
+
+int main(int argc, char** argv) {
+	Singleton ob = Singleton::getInstance();
+	ob->dodaj(10);
+	ob->wyswietl();
+	
+	cin >> int i;
+	
+	return 0;
+}
+
+public class Pamiatka {
+   private String state;
+
+   public Pamiatka(String state){
+      this.state = state;
+   }
+
+   public String getState(){
+      return state;
+   }	
+}
+
+//klasa oryginału
+
+public class Originator {
+   private String state;
+
+   public void setState(String state){
+      this.state = state;
+   }
+
+   public String getState(){
+      return state;
+   }
+
+   public Pamiatka saveStateToPamiatka(){
+      return new Pamiatka(state);
+   }
+
+   public void getStateFromPamiatka(Pamiatka pamiatka){
+      state = pamiatka.getState();
+   }
+}
+//CareTaker przechowywuje pamiatki w celu ich np.: cofniecia czy ponownego zaladowania
+//import java.util.ArrayList;
+import java.util.List;
+
+public class CareTaker {
+   private List<Pamiatka> pamiatkaList = new ArrayList<Pamiatka>();
+
+   public void add(Pamiatka state){
+      mementoList.add(state);
+   }
+
+   public Pamiatka get(int index){
+      return pamiatkaList.get(index);
+   }
+}
+//i tutaj zabawa memento 
+public class WzorzecMemento {
+   public static void main(String[] args) {
+   
+      Originator originator = new Originator();
+      CareTaker careTaker = new CareTaker();
+      
+      originator.setState("State #1");
+      originator.setState("State #2");
+      careTaker.add(originator.saveStateToPamiatka());
+      
+      originator.setState("State #3");
+      careTaker.add(originator.saveStateToPamiatka());
+      
+      originator.setState("State #4");
+      System.out.println("Current State: " + originator.getState());		
+      
+      originator.getStateFromPamiatka(careTaker.get(0));
+      System.out.println("First saved State: " + originator.getState());
+      originator.getStateFromPamiakta(careTaker.get(1));
+      System.out.println("Second saved State: " + originator.getState());
+   }
+}
+;
